@@ -1,3 +1,3 @@
 ; ahk_class PotPlayer
 
-#o::Send,{Media_Play_Pause}
+#SC01F::Send {Media_Play_Pause}
