@@ -1,8 +1,10 @@
 #InstallKeybdHook
 #SingleInstance Force
 SetTitleMatchMode, RegEx
+SetCapsLockState, AlwaysOff
 
-; ahk_class PotPlayer
+Lang := 0
+BTickLangChange := 1
 
 #SC01F::Send {Media_Play_Pause}
 
@@ -42,64 +44,53 @@ ActivateKeyboardLayout(HKL) ; This does not work.
 	}
 }
 
-$`::
-	Send {``}
+ToggleLanguage()
+{
+	Global Lang
+	Lang := 1 - Lang
 	If (Lang = 0)
 	{
 		PostMessage, 0x50, 0, 0xF0020409,, A
-		Lang := 1
 	}
 	Else
 	{
 		PostMessage, 0x50, 0, 0xF03A0429,, A
-		Lang := 0
+	}
+}
+
+$`::
+	Send {``}
+	If (BTickLangChange = 1)
+	{
+		ToggleLanguage()
 	}
 	Return
 
 Capslock::
-	SetCapsLockState, Off
-	If (Lang = 0)
-	{
-		PostMessage, 0x50, 0, 0xF0020409,, A
-		Lang := 1
-	}
-	Else
-	{
-		PostMessage, 0x50, 0, 0xF03A0429,, A
-		Lang := 0
-	}
+	ToggleLanguage()
 	Return
 
 <^Capslock::
-	SetCapsLockState, Off
 	PostMessage, 0x50, 0, 0xF01A0409,, A
+	Lang := 0
 	Return
 
 >^Capslock::
-	SetCapsLockState, Off
 	PostMessage, 0x50, 0, 0xF01B0409,, A
+	Lang := 0
 	Return
 
 !Capslock::
 	T := GetKeyboardLayout()
+	S := GetKeyboardLayoutName()
 	H := Format("{1:X}", T)
-	MsgBox, %T% %H%
+	MsgBox, %T% %H% %S%
 	Return
 
-Temp()
-{
-	;^1:: ; This line is commented out.
-		T := GetKeyboardLayout()
-		H := Format("{1:X}", T)
-		MsgBox, %T% %H%
-		Return
-
-	;^2:: ; This line is commented out.
-		;ActivateKeyboardLayout(0xF0020409)
-		PostMessage, 0x50, 0, 0xF0020409,, A
-		MsgBox, Done.
-		Return
-}
+Capslock & `::
+	BTickLangChange := 1 - BTickLangChange
+	MsgBox BTickLangChange = %BTickLangChange%
+	Return
 
 #IfWinActive, ^Git Gui ahk_class ^TkTopLevel$
 
