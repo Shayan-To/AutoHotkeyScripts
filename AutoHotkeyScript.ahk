@@ -42,6 +42,20 @@ ActivateKeyboardLayout(HKL) ; This does not work.
 	}
 }
 
+$`::
+	Send {``}
+	If (Lang = 0)
+	{
+		PostMessage, 0x50, 0, 0xF0020409,, A
+		Lang := 1
+	}
+	Else
+	{
+		PostMessage, 0x50, 0, 0xF03A0429,, A
+		Lang := 0
+	}
+	Return
+
 Capslock::
 	SetCapsLockState, Off
 	If (Lang = 0)
