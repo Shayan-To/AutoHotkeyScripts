@@ -3,19 +3,7 @@
 SetTitleMatchMode, RegEx
 SetCapsLockState, AlwaysOff
 
-Lang := 0
-BTickLangChange := 1
-
-#SC01F::Send {Media_Play_Pause}
-
-$+1::Send {!}
-$+2::Send {@}
-$+3::Send {#}
-$+4::Send {$}
-$+5::Send {`%}
-$+6::Send {^}
-;$+7::Send {&}
-$+8::Send {*}
+; ====================================================================
 
 GetKeyboardLayout()
 {
@@ -30,13 +18,20 @@ GetKeyboardLayoutName()
 	Return Str
 }
 
+InitKeyboardLayoutChange()
+{
+	Static IsInitialized := 0
+	If (IsInitialized = 0)
+	{
+		DllCall("Ole32.dll\OleInitialize", "Ptr", 0, "Int")
+		DllCall("LoadKeyboardLayout", "Str", "00020409", "Int")
+		IsInitialized = 1
+	}
+}
+
 ActivateKeyboardLayout(HKL) ; This does not work.
 {
-	; For initialization, necessary to run only once.
-	DllCall("Ole32.dll\OleInitialize", "Ptr", 0, "Int")
-	DllCall("LoadKeyboardLayout", "Str", "00020409", "Int")
-
-
+	InitKeyboardLayoutChange()
 	T := DllCall("ActivateKeyboardLayout", "UInt", HKL, "UInt", 0x00000000, "PTR")
 	If (!T)
 	{
@@ -44,19 +39,37 @@ ActivateKeyboardLayout(HKL) ; This does not work.
 	}
 }
 
+; ====================================================================
+
+Lang := 0
 ToggleLanguage()
 {
 	Global Lang
 	Lang := 1 - Lang
 	If (Lang = 0)
 	{
-		PostMessage, 0x50, 0, 0xF0020409,, A
+		PostMessage, 0x50, 0, 0xF0020409,, A ; Eng DV
 	}
 	Else
 	{
-		PostMessage, 0x50, 0, 0xF03A0429,, A
+		PostMessage, 0x50, 0, 0xF03A0429,, A ; Per Std
 	}
 }
+
+BTickLangChange := 1
+
+; ====================================================================
+
+#SC01F::Send {Media_Play_Pause}
+
+$+1::Send {!}
+$+2::Send {@}
+$+3::Send {#}
+$+4::Send {$}
+$+5::Send {`%}
+$+6::Send {^}
+;$+7::Send {&}
+$+8::Send {*}
 
 $`::
 	Send {``}
@@ -66,17 +79,19 @@ $`::
 	}
 	Return
 
+; ====================================================================
+
 Capslock::
 	ToggleLanguage()
 	Return
 
 <^Capslock::
-	PostMessage, 0x50, 0, 0xF01A0409,, A
+	PostMessage, 0x50, 0, 0xF01A0409,, A ; Eng DVL
 	Lang := 0
 	Return
 
 >^Capslock::
-	PostMessage, 0x50, 0, 0xF01B0409,, A
+	PostMessage, 0x50, 0, 0xF01B0409,, A ; Eng DVR
 	Lang := 0
 	Return
 
@@ -91,6 +106,8 @@ Capslock & `::
 	BTickLangChange := 1 - BTickLangChange
 	MsgBox BTickLangChange = %BTickLangChange%
 	Return
+
+; ====================================================================
 
 #IfWinActive, ^Git Gui ahk_class ^TkTopLevel$
 
