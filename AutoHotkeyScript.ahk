@@ -1,3 +1,4 @@
+#Include %A_ScriptDir%
 #InstallKeybdHook
 #SingleInstance Force
 SetTitleMatchMode, RegEx
@@ -41,20 +42,116 @@ ActivateKeyboardLayout(HKL) ; This does not work.
 
 ; ====================================================================
 
-Lang := 0
+Lang_Eng := 0x0409
+Lang_Pes := 0x0429
+Lang_Arb := 0x0401
+
+Keybd_Eng_US := 0x04090409
+Keybd_Eng_DV := 0xF0020409
+Keybd_Eng_DVL := 0xF01A0409
+Keybd_Eng_DVR := 0xF01B0409
+Keybd_Pes := 0x04290429
+Keybd_Pes_Std := 0xF03A0429
+Keybd_Arb_101 := 0x04010401
+
+LastLangId := Keybd_Eng_DV
+
+Global Lang_Eng, Lang_Pes, Lang_Arb
+Global Keybd_Eng_US, Keybd_Eng_DV, Keybd_Eng_DVL, Keybd_Eng_DVR, Keybd_Pes, Keybd_Pes_Std, Keybd_Arb_101
+Global LastLangId
+
+SetKeyboard(LangId)
+{
+	LastLangId := LangId
+	PostMessage, 0x50, 0, %LangId%,, A
+}
+
 ToggleLanguage()
 {
-	Global Lang
-	Lang := 1 - Lang
-	If (Lang = 0)
+	Lang := LastLangId & 0xFFFF
+	If (Lang = Lang_Eng)
 	{
-		PostMessage, 0x50, 0, 0xF0020409,, A ; Eng DV
+		SetKeyboard(Keybd_Pes_Std)
+	}
+	Else If (Lang = Lang_Pes Or Lang = Lang_Arb)
+	{
+		SetKeyboard(Keybd_Eng_DV)
 	}
 	Else
 	{
-		PostMessage, 0x50, 0, 0xF03A0429,, A ; Per Std
+		MsgBox Unknown language.
 	}
 }
+
+ToggleKeyboard(Direction)
+{
+	Lang := LastLangId & 0xFFFF
+	If (Lang = Lang_Eng)
+	{
+		If (Direction <> "")
+		{
+			If (Direction = "Left")
+			{
+				SetKeyboard(Keybd_Eng_DVL)
+			}
+			Else If (Direction = "Right")
+			{
+				SetKeyboard(Keybd_Eng_DVR)
+			}
+			Else
+			{
+				MsgBox Invalid Direction.
+			}
+		}
+		Else
+		{
+			If (LastLangId = Keybd_Eng_US)
+			{
+				SetKeyboard(Keybd_Eng_DV)
+			}
+			Else If (LastLangId = Keybd_Eng_DV Or LastLangId = Keybd_Eng_DVL Or LastLangId = Keybd_Eng_DVR)
+			{
+				SetKeyboard(Keybd_Eng_US)
+			}
+			Else
+			{
+				MsgBox Unknown keyboard.
+			}
+		}
+	}
+	Else If (Lang = Lang_Pes Or Lang = Lang_Arb)
+	{
+		If (Direction <> "")
+		{
+			MsgBox No directional keyboard defined.
+		}
+		Else
+		{
+			If (LastLangId = Keybd_Pes_Std)
+			{
+				SetKeyboard(Keybd_Pes)
+			}
+			Else If (LastLangId = Keybd_Pes)
+			{
+				SetKeyboard(Keybd_Arb_101)
+			}
+			Else If (LastLangId = Keybd_Arb_101)
+			{
+				SetKeyboard(Keybd_Pes_Std)
+			}
+			Else
+			{
+				MsgBox Unknown keyboard.
+			}
+		}
+	}
+	Else
+	{
+		MsgBox Unknown language.
+	}
+}
+
+; ====================================================================
 
 BTickLangChange := 1
 
@@ -86,13 +183,15 @@ Capslock::
 	Return
 
 <^Capslock::
-	PostMessage, 0x50, 0, 0xF01A0409,, A ; Eng DVL
-	Lang := 0
+	ToggleKeyboard("Left")
 	Return
 
 >^Capslock::
-	PostMessage, 0x50, 0, 0xF01B0409,, A ; Eng DVR
-	Lang := 0
+	ToggleKeyboard("Right")
+	Return
+
++Capslock::
+	ToggleKeyboard("")
 	Return
 
 !Capslock::
