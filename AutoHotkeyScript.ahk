@@ -6,6 +6,67 @@ SetCapsLockState, AlwaysOff
 
 ; ====================================================================
 
+FindKey(Array, Element)
+{
+	For K, V In Array
+	{
+		If (Element = V)
+		{
+			Return K
+		}
+	}
+	Return False
+}
+
+Count(Object)
+{
+	R := 0
+	For K In Object
+	{
+		R += 1
+	}
+	Return R
+}
+
+PushRange(Array, Other)
+{
+	Loop % Other.Length()
+	{
+		Array.Push(Other[A_Index])
+	}
+}
+
+ToString(Obj)
+{
+	Return ToStringImpl(Obj, "")
+}
+
+ToStringImpl(Obj, Indent)
+{
+	R := ""
+
+	For K, V In Obj
+	{
+		If (!R)
+		{
+			R .= "{`n    " . Indent
+		}
+		Else
+		{
+			R .= ",`n    " . Indent
+		}
+		R .= K . ": " . ToStringImpl(V, Indent . "    ")
+	}
+	If (!R)
+	{
+		Return Obj
+	}
+	R .= "`n" . Indent . "}"
+	Return R
+}
+
+; ====================================================================
+
 GetKeyboardLayout()
 {
 	HKL := DllCall("GetKeyboardLayout", "UInt", 0, "Ptr")
@@ -54,11 +115,45 @@ Keybd_Pes := 0x04290429
 Keybd_Pes_Std := 0xF03A0429
 Keybd_Arb_101 := 0x04010401
 
-LastLangId := Keybd_Eng_DV
+KeyboardsData := [{}
+	,{Keyboards: {Normal: [Keybd_Eng_DV, Keybd_Eng_US]
+			,Left: [Keybd_Eng_DVL]
+			,Right: [Keybd_Eng_DVR]}}
+	,{Keyboards: {Normal: [Keybd_Pes_Std, Keybd_Pes, Keybd_Arb_101]
+			,Left: []
+			,Right: []}}
+,{}]
 
-Global Lang_Eng, Lang_Pes, Lang_Arb
-Global Keybd_Eng_US, Keybd_Eng_DV, Keybd_Eng_DVL, Keybd_Eng_DVR, Keybd_Pes, Keybd_Pes_Std, Keybd_Arb_101
+LastLangId := 0
+
+Global KeyboardsData
 Global LastLangId
+
+InitKeyboardsData()
+{
+	KeyboardsData.RemoveAt(1)
+	KeyboardsData.RemoveAt(KeyboardsData.Length())
+
+	Loop % KeyboardsData.Length()
+	{
+		D := KeyboardsData[A_Index]
+
+		D.AllKeyboards := []
+
+		If (Not (D.Keyboards.HasKey("Normal") And D.Keyboards.HasKey("Left") And D.Keyboards.HasKey("Right") And Count(D.Keyboards) = 3))
+		{
+			MsgBox, % "Keyboards does not have all the 'Normal', 'Left' and 'Right' keys or has extra keys."
+			ExitApp, 1
+		}
+
+		For K, L In D.Keyboards
+		{
+			PushRange(D.AllKeyboards, L)
+		}
+	}
+
+	SetKeyboard(KeyboardsData[1].Keyboards["Normal"][1])
+}
 
 SetKeyboard(LangId)
 {
@@ -66,90 +161,49 @@ SetKeyboard(LangId)
 	PostMessage, 0x50, 0, %LangId%,, A
 }
 
-ToggleLanguage()
+ToggleKeyboard(Kind)
 {
-	Lang := LastLangId & 0xFFFF
-	If (Lang = Lang_Eng)
+	Loop % KeyboardsData.Length()
 	{
-		SetKeyboard(Keybd_Pes_Std)
+		I := A_Index
+		D := KeyboardsData[I]
+		If (FindKey(D.AllKeyboards, LastLangId))
+		{
+			Break
+		}
 	}
-	Else If (Lang = Lang_Pes Or Lang = Lang_Arb)
+
+	If (!I)
 	{
-		SetKeyboard(Keybd_Eng_DV)
+		MsgBox, Invalid script state.
+		Return
 	}
-	Else
+
+	If (!Kind)
 	{
-		MsgBox Unknown language.
+		I := Mod(I, KeyboardsData.Length()) + 1
+		D := KeyboardsData[I]
+		SetKeyboard(D.Keyboards["Normal"][1])
+		Return
 	}
+
+	S := D.Keyboards[Kind]
+
+	If (S.Length() = 0)
+	{
+		MsgBox, No keyboards for '%Kind%'.
+	}
+
+	J := FindKey(S, LastLangId)
+	If (!J)
+	{
+		J := 0
+	}
+	J := Mod(J, S.Length()) + 1
+	SetKeyboard(S[J])
 }
 
-ToggleKeyboard(Direction)
-{
-	Lang := LastLangId & 0xFFFF
-	If (Lang = Lang_Eng)
-	{
-		If (Direction <> "")
-		{
-			If (Direction = "Left")
-			{
-				SetKeyboard(Keybd_Eng_DVL)
-			}
-			Else If (Direction = "Right")
-			{
-				SetKeyboard(Keybd_Eng_DVR)
-			}
-			Else
-			{
-				MsgBox Invalid Direction.
-			}
-		}
-		Else
-		{
-			If (LastLangId = Keybd_Eng_US)
-			{
-				SetKeyboard(Keybd_Eng_DV)
-			}
-			Else If (LastLangId = Keybd_Eng_DV Or LastLangId = Keybd_Eng_DVL Or LastLangId = Keybd_Eng_DVR)
-			{
-				SetKeyboard(Keybd_Eng_US)
-			}
-			Else
-			{
-				MsgBox Unknown keyboard.
-			}
-		}
-	}
-	Else If (Lang = Lang_Pes Or Lang = Lang_Arb)
-	{
-		If (Direction <> "")
-		{
-			MsgBox No directional keyboard defined.
-		}
-		Else
-		{
-			If (LastLangId = Keybd_Pes_Std)
-			{
-				SetKeyboard(Keybd_Pes)
-			}
-			Else If (LastLangId = Keybd_Pes)
-			{
-				SetKeyboard(Keybd_Arb_101)
-			}
-			Else If (LastLangId = Keybd_Arb_101)
-			{
-				SetKeyboard(Keybd_Pes_Std)
-			}
-			Else
-			{
-				MsgBox Unknown keyboard.
-			}
-		}
-	}
-	Else
-	{
-		MsgBox Unknown language.
-	}
-}
+InitKeyboardsData()
 
 ; ====================================================================
 
@@ -172,14 +226,14 @@ $`::
 	Send {``}
 	If (BTickLangChange = 1)
 	{
-		ToggleLanguage()
+		ToggleKeyboard("")
 	}
 	Return
 
 ; ====================================================================
 
 Capslock::
-	ToggleLanguage()
+	ToggleKeyboard("")
 	Return
 
 <^Capslock::
@@ -191,7 +245,7 @@ Capslock::
 	Return
 
 +Capslock::
-	ToggleKeyboard("")
+	ToggleKeyboard("Normal")
 	Return
 
 !Capslock::
