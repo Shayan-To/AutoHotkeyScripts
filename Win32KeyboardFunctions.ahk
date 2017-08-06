@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%
+#Include, %A_ScriptDir%
 
 GetKeyboardLayout()
 {
@@ -30,6 +30,6 @@ ActivateKeyboardLayout(HKL) ; This does not work.
 	T := DllCall("ActivateKeyboardLayout", "UInt", HKL, "UInt", 0x00000000, "PTR")
 	If (!T)
 	{
-		MsgBox, Error
+		MsgBox, Error.
 	}
 }

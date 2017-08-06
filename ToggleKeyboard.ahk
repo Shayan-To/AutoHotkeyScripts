@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%
+#Include, %A_ScriptDir%
 
 LastLangId := 0
 
@@ -10,7 +10,7 @@ InitKeyboardsData()
 	KeyboardsData.RemoveAt(1)
 	KeyboardsData.RemoveAt(KeyboardsData.Length())
 
-	Loop % KeyboardsData.Length()
+	Loop, % KeyboardsData.Length()
 	{
 		D := KeyboardsData[A_Index]
 
@@ -18,7 +18,7 @@ InitKeyboardsData()
 
 		If (Not (D.Keyboards.HasKey("Normal") And D.Keyboards.HasKey("Left") And D.Keyboards.HasKey("Right") And Count(D.Keyboards) = 3))
 		{
-			MsgBox, % "Keyboards does not have all the 'Normal', 'Left' and 'Right' keys or has extra keys."
+			MsgBox, Invalid KeyboardsData.`nAll entries should exactly have the three 'Normal', 'Left' and 'Right' keys.
 			ExitApp, 1
 		}
 
@@ -39,7 +39,7 @@ SetKeyboard(LangId)
 
 ToggleKeyboard(Kind)
 {
-	Loop % KeyboardsData.Length()
+	Loop, % KeyboardsData.Length()
 	{
 		I := A_Index
 		D := KeyboardsData[I]

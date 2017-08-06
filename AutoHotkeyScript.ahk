@@ -1,12 +1,15 @@
-#Include %A_ScriptDir%
+#Include, %A_ScriptDir%
 #InstallKeybdHook
-#SingleInstance Force
-SetTitleMatchMode, RegEx
-SetCapsLockState, AlwaysOff
+#SingleInstance, Force
 
 #Include, CommonObjectFunctions.ahk
 #Include, Win32KeyboardFunctions.ahk
 #Include, ToggleKeyboard.ahk
+
+; ====================================================================
+
+SetTitleMatchMode, RegEx
+SetCapsLockState, AlwaysOff
 
 ; ====================================================================
 
@@ -39,26 +42,27 @@ BTickLangChange := 1
 
 ; ====================================================================
 
-#SC01F::Send {Media_Play_Pause}
+; #o::
+#SC01F::Send, {Media_Play_Pause}
 
-$+1::Send {!}
-$+2::Send {@}
-$+3::Send {#}
-$+4::Send {$}
-$+5::Send {`%}
-$+6::Send {^}
-;$+7::Send {&}
-$+8::Send {*}
+$+1::Send, {!}
+$+2::Send, {@}
+$+3::Send, {#}
+$+4::Send, {$}
+$+5::Send, {`%}
+$+6::Send, {^}
+;$+7::Send, {&}
+$+8::Send, {*}
+
+; ====================================================================
 
 $`::
-	Send {``}
+	Send, {``}
 	If (BTickLangChange = 1)
 	{
 		ToggleKeyboard("")
 	}
 	Return
-
-; ====================================================================
 
 Capslock::
 	ToggleKeyboard("")
@@ -85,35 +89,9 @@ Capslock::
 
 Capslock & `::
 	BTickLangChange := 1 - BTickLangChange
-	MsgBox BTickLangChange = %BTickLangChange%
+	MsgBox, BTickLangChange = %BTickLangChange%
 	Return
 
 ; ====================================================================
 
-#IfWinActive, ^Git Gui ahk_class ^TkTopLevel$
-
-^+t::
-	Send !c
-	Send {Down 3}
-	Send {Enter}
-	Return
-^+i::
-	Send !c
-	Send {Down 4}
-	Send {Enter}
-#IfWinActive, ahk_class ^#32770$
-	Send y
-#IfWinActive, ^Git Gui ahk_class ^TkTopLevel$
-	Return
-^+u::
-	Send !c
-	Send {Down 5}
-	Send {Enter}
-	Return
-^+j::
-	Send !c
-	Send {Down 6}
-	Send {Enter}
-	Return
-
-#IfWinActive
+#Include, GitGui.ahk

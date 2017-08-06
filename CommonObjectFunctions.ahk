@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%
+#Include, %A_ScriptDir%
 
 FindKey(Array, Element)
 {
@@ -24,7 +24,7 @@ Count(Object)
 
 PushRange(Array, Other)
 {
-	Loop % Other.Length()
+	Loop, % Other.Length()
 	{
 		Array.Push(Other[A_Index])
 	}
