@@ -33,6 +33,12 @@ $+6::Send, {^}
 ;$+7::Send, {&}
 $+8::Send, {*}
 
+#If, DisableInsert = 1
+
+Insert::Return
+
+#If,
+
 ; ====================================================================
 
 $`::
@@ -69,6 +75,11 @@ Capslock::
 Capslock & `::
 	BackTickLanguageChange := 1 - BackTickLanguageChange
 	MsgBox, BackTickLanguageChange = %BackTickLanguageChange%
+	Return
+
+Capslock & Insert::
+	DisableInsert := 1 - DisableInsert
+	MsgBox, DisableInsert = %DisableInsert%
 	Return
 
 Capslock & \::
