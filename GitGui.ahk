@@ -1,6 +1,6 @@
 #Include, %A_ScriptDir%
 
-#IfWinActive, ^Git Gui ahk_class ^TkTopLevel$
+#If, GitGuiHotkeysFix = 1 And WinActive("^Git Gui ahk_class ^TkTopLevel$")
 
 ^+t::
 	Send, !c
@@ -12,9 +12,10 @@
 	Send, !c
 	Send, {Down 4}
 	Send, {Enter}
-#IfWinActive, ahk_class ^#32770$
-	Send, y
-#IfWinActive, ^Git Gui ahk_class ^TkTopLevel$
+	If (WinActive("ahk_class ^#32770$"))
+	{
+		Send, y
+	}
 	Return
 
 ^+u::
@@ -29,4 +30,4 @@
 	Send, {Enter}
 	Return
 
-#IfWinActive
+#If,

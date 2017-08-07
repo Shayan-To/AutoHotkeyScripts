@@ -25,4 +25,8 @@ KeyboardsData := [{}
 
 ; ====================================================================
 
+WinOPlayerPlayPause := 1
+GitGuiHotkeysFix := 1
+
+FixPersianSymbolKeys := 1
 BackTickLanguageChange := 1

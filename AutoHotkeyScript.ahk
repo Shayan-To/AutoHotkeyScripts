@@ -17,8 +17,12 @@ SetCapsLockState, AlwaysOff
 
 ; ====================================================================
 
+#If, WinOPlayerPlayPause = 1
+
 ; #o::
 #SC01F::Send, {Media_Play_Pause}
+
+#If, FixPersianSymbolKeys = 1
 
 $+1::Send, {!}
 $+2::Send, {@}
@@ -65,6 +69,11 @@ Capslock::
 Capslock & `::
 	BackTickLanguageChange := 1 - BackTickLanguageChange
 	MsgBox, BackTickLanguageChange = %BackTickLanguageChange%
+	Return
+
+Capslock & \::
+	FixPersianSymbolKeys := 1 - FixPersianSymbolKeys
+	MsgBox, FixPersianSymbolKeys = %FixPersianSymbolKeys%
 	Return
 
 ; ====================================================================
