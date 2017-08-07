@@ -12,6 +12,7 @@
 	Send, !c
 	Send, {Down 4}
 	Send, {Enter}
+	Sleep, 100
 	If (WinActive("ahk_class ^#32770$"))
 	{
 		Send, y
