@@ -72,6 +72,17 @@ Capslock::
 	MsgBox, 0x%H%
 	Return
 
+Capslock & Tab::
+	If (GetKeyState("Capslock", "T") = 1)
+	{
+		SetCapsLockState, AlwaysOff
+	}
+	Else
+	{
+		SetCapsLockState, AlwaysOn
+	}
+	Return
+
 Capslock & `::
 	BackTickLanguageChange := 1 - BackTickLanguageChange
 	MsgBox, BackTickLanguageChange = %BackTickLanguageChange%
