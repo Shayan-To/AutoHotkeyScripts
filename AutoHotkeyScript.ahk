@@ -19,8 +19,7 @@ SetCapsLockState, AlwaysOff
 
 #If, WinOPlayerPlayPause = 1
 
-; #o::
-#SC01F::Send, {Media_Play_Pause}
+#SC02C::Send, {Media_Play_Pause}
 
 #If, FixPersianSymbolKeys = 1
 
