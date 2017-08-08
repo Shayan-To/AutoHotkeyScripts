@@ -10,25 +10,51 @@ InitKeyboardsData()
 	KeyboardsData.RemoveAt(1)
 	KeyboardsData.RemoveAt(KeyboardsData.Length())
 
+	KeyboardKinds := ["Normal", "Left", "Right"]
+
 	Loop, % KeyboardsData.Length()
 	{
 		D := KeyboardsData[A_Index]
 
-		D.AllKeyboards := []
-
-		If (Not (D.Keyboards.HasKey("Normal") And D.Keyboards.HasKey("Left") And D.Keyboards.HasKey("Right") And Count(D.Keyboards) = 3))
+		For K In D.Keyboards
 		{
-			MsgBox, Invalid KeyboardsData.`nAll entries should exactly have the three 'Normal', 'Left' and 'Right' keys.
+			If (Not FindKey(KeyboardKinds, K))
+			{
+				MsgBox, % "Invalid KeyboardsData.`nAll entries should exactly these keys:`n" . ToStringArray(KeyboardKinds)
+				ExitApp, 1
+			}
+		}
+
+		D.AllKeyboards := []
+		D.CurrentKind := ""
+		D.CurrentIndex := 1
+
+		For I, K In KeyboardKinds
+		{
+			If (Not D.Keyboards.HasKey(K))
+			{
+				MsgBox, % "Invalid KeyboardsData.`nAll entries should exactly these keys:`n" . ToStringArray(KeyboardKinds)
+				ExitApp, 1
+			}
+
+			PushRange(D.AllKeyboards, D.Keyboards[K])
+
+			If (Not D.CurrentKind And D.Keyboards[K].Length() <> 0)
+			{
+				D.CurrentKind := K
+			}
+		}
+
+		If (D.AllKeyboards.Length() = 0 Or Not D.CurrentKind)
+		{
+			MsgBox, Invalid KeyboardsData.`nSome entries have no keyboards defined.
 			ExitApp, 1
 		}
 
-		For K, L In D.Keyboards
-		{
-			PushRange(D.AllKeyboards, L)
-		}
+		D.CurrentKeyboard := D.Keyboards[D.CurrentKind][D.CurrentIndex]
 	}
 
-	SetKeyboard(KeyboardsData[1].Keyboards["Normal"][1])
+	SetKeyboard(KeyboardsData[1].CurrentKeyboard)
 }
 
 SetKeyboard(LangId)
@@ -59,7 +85,7 @@ ToggleKeyboard(Kind)
 	{
 		I := Mod(I, KeyboardsData.Length()) + 1
 		D := KeyboardsData[I]
-		SetKeyboard(D.Keyboards["Normal"][1])
+		SetKeyboard(D.CurrentKeyboard)
 		Return
 	}
 
@@ -68,13 +94,21 @@ ToggleKeyboard(Kind)
 	If (S.Length() = 0)
 	{
 		MsgBox, No keyboards for '%Kind%'.
+		Return
 	}
 
-	J := FindKey(S, LastLangId)
-	If (!J)
+	If (D.CurrentKind = Kind)
+	{
+		J := D.CurrentIndex
+	}
+	Else
 	{
 		J := 0
 	}
 	J := Mod(J, S.Length()) + 1
+
+	D.CurrentKind := Kind
+	D.CurrentIndex := J
+	D.CurrentKeyboard := S[J]
 	SetKeyboard(S[J])
 }

@@ -67,9 +67,9 @@ Capslock::
 
 !Capslock::
 	T := GetKeyboardLayout()
-	S := GetKeyboardLayoutName()
-	H := Format("{1:X}", T)
-	MsgBox, %T% %H% %S%
+	H := Format("{1:016X}", T)
+	H := SubStr(H, 9)
+	MsgBox, 0x%H%
 	Return
 
 Capslock & `::

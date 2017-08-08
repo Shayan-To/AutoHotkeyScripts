@@ -1,8 +1,8 @@
 #Include, %A_ScriptDir%
 
-FindKey(Array, Element)
+FindKey(Object, Element)
 {
-	For K, V In Array
+	For K, V In Object
 	{
 		If (Element = V)
 		{
@@ -57,4 +57,23 @@ ToStringImpl(Obj, Indent)
 	}
 	R .= "`n" . Indent . "}"
 	Return R
+}
+
+ToStringArray(Array)
+{
+	R := "["
+
+	Bl := 0
+
+	Loop % Array.Length()
+	{
+		If (Bl = 1)
+		{
+			R .= ", "
+		}
+		Bl := 1
+		R .= ToStringImpl(Array[A_Index], "    ")
+	}
+
+	Return R . "]"
 }
