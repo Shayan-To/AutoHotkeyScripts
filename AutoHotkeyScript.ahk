@@ -41,6 +41,8 @@ Insert::Return
 
 ; ====================================================================
 
+#If, BackTickLanguageChange = 1 Or FixPersianSymbolKeys = 1
+
 $`::
 	Send, {``}
 	If (BackTickLanguageChange = 1)
@@ -48,6 +50,8 @@ $`::
 		ToggleKeyboard("")
 	}
 	Return
+
+#If,
 
 Capslock::
 	ToggleKeyboard("")
