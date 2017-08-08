@@ -27,7 +27,7 @@ InitKeyboardsData()
 
 		D.AllKeyboards := []
 		D.CurrentKind := ""
-		D.CurrentIndex := 1
+		D.KindIndex := {}
 
 		For I, K In KeyboardKinds
 		{
@@ -43,6 +43,8 @@ InitKeyboardsData()
 			{
 				D.CurrentKind := K
 			}
+
+			D.KindIndex[K] := 1
 		}
 
 		If (D.AllKeyboards.Length() = 0 Or Not D.CurrentKind)
@@ -51,7 +53,7 @@ InitKeyboardsData()
 			ExitApp, 1
 		}
 
-		D.CurrentKeyboard := D.Keyboards[D.CurrentKind][D.CurrentIndex]
+		D.CurrentKeyboard := D.Keyboards[D.CurrentKind][D.KindIndex[D.CurrentKind]]
 	}
 
 	SetKeyboard(KeyboardsData[1].CurrentKeyboard)
@@ -97,18 +99,14 @@ ToggleKeyboard(Kind)
 		Return
 	}
 
+	J := D.KindIndex[Kind]
 	If (D.CurrentKind = Kind)
 	{
-		J := D.CurrentIndex
+		J := Mod(J, S.Length()) + 1
 	}
-	Else
-	{
-		J := 0
-	}
-	J := Mod(J, S.Length()) + 1
 
 	D.CurrentKind := Kind
-	D.CurrentIndex := J
+	D.KindIndex[Kind] := J
 	D.CurrentKeyboard := S[J]
 	SetKeyboard(S[J])
 }
