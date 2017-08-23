@@ -2,6 +2,15 @@
 
 ; ====================================================================
 
+WinOPlayerPlayPause := 1
+GitGuiHotkeysFix := 1
+
+DisableInsert := 1
+FixPersianSymbolKeys := 1
+BackTickLanguageChange := 1
+
+; ====================================================================
+
 Lang_Eng := 0x0409
 Lang_Pes := 0x0429
 Lang_Arb := 0x0401
@@ -22,12 +31,3 @@ KeyboardsData := [{}
 			,Left: []
 			,Right: []}}
 ,{}]
-
-; ====================================================================
-
-WinOPlayerPlayPause := 1
-GitGuiHotkeysFix := 1
-
-DisableInsert := 1
-FixPersianSymbolKeys := 1
-BackTickLanguageChange := 1
