@@ -103,4 +103,5 @@ Capslock & \::
 
 ; ====================================================================
 
+#Include, DirectionalFormatting.ahk
 #Include, GitGui.ahk
