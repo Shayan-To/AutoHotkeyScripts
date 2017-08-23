@@ -5,6 +5,7 @@
 #Include, CommonObjectFunctions.ahk
 #Include, Win32KeyboardFunctions.ahk
 #Include, ToggleKeyboard.ahk
+#Include, DirectionalFormatting.ahk
 
 ; ====================================================================
 
@@ -23,14 +24,14 @@ SetCapsLockState, AlwaysOff
 
 #If, FixPersianSymbolKeys = 1
 
-$+1::Send, {!}
-$+2::Send, {@}
-$+3::Send, {#}
-$+4::Send, {$}
-;$+5::Send, {`%}
-$+6::Send, {^}
-;$+7::Send, {&}
-$+8::Send, {*}
+$+1:: Send, {!}
+$+2:: Send, {@}
+$+3:: Send, {#}
+$+4:: Send, {$}
+;$+5:: Send, {`%}
+$+6:: Send, {^}
+;$+7:: Send, {&}
+$+8:: Send, {*}
 
 #If, DisableInsert = 1
 
@@ -52,21 +53,15 @@ $`::
 
 #If,
 
-Capslock::
-	ToggleKeyboard("")
-	Return
+Capslock & Left:: InsertDirectionalMark("Left")
+Capslock & Right:: InsertDirectionalMark("Right")
+Capslock & Down:: InsertDirectionalMark("Down")
+Capslock & Up:: InsertDirectionalMark("Up")
 
-<^Capslock::
-	ToggleKeyboard("Left")
-	Return
-
->^Capslock::
-	ToggleKeyboard("Right")
-	Return
-
-+Capslock::
-	ToggleKeyboard("Normal")
-	Return
+Capslock:: ToggleKeyboard("")
+<^Capslock:: ToggleKeyboard("Left")
+>^Capslock:: ToggleKeyboard("Right")
++Capslock:: ToggleKeyboard("Normal")
 
 !Capslock::
 	T := GetKeyboardLayout()
@@ -103,5 +98,4 @@ Capslock & \::
 
 ; ====================================================================
 
-#Include, DirectionalFormatting.ahk
 #Include, GitGui.ahk

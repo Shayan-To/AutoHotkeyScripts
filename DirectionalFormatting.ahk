@@ -71,11 +71,6 @@ InsertDirectionalMark(Key)
 	}
 }
 
-Capslock & Left::InsertDirectionalMark("Left")
-Capslock & Right::InsertDirectionalMark("Right")
-Capslock & Down::InsertDirectionalMark("Down")
-Capslock & Up::InsertDirectionalMark("Up")
-
 ; Abbr.    Code Point    Name                          Description
 ; LRE      U+202A        LEFT-TO-RIGHT EMBEDDING       Treat the following text as embedded left-to-right.
 ; RLE      U+202B        RIGHT-TO-LEFT EMBEDDING       Treat the following text as embedded right-to-left.
