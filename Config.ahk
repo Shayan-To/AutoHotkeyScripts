@@ -4,6 +4,7 @@
 
 WinOPlayerPlayPause := 1
 GitGuiHotkeysFix := 1
+ReverseDirectionalFormattingChars := 0
 
 DisableInsert := 1
 FixPersianSymbolKeys := 1

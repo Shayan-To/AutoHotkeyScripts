@@ -9,6 +9,18 @@ InsertDirectionalMark(Key)
 	A := 3
 	Modifiers := GetKeyState("Alt") * A + GetKeyState("Control") * C + GetKeyState("Shift") * S
 
+	If (ReverseDirectionalFormattingChars = 1)
+	{
+		If (Key = "Left")
+		{
+			Key := "Right"
+		}
+		Else If (Key = "Right")
+		{
+			Key := "Left"
+		}
+	}
+
 	If (Modifiers = 0)
 	{
 		If (Key = "Left")
