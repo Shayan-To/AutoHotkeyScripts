@@ -1,0 +1,7 @@
+In the name of God
+
+[2017-08-23]
+- Add ability to type directional formatting characters with ease.
+
+[2017-08-16]
+- Initial release.
