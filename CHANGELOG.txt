@@ -1,5 +1,8 @@
 In the name of God
 
+[2017-11-02]
+- Add PotPlayer keys fix (for Dvorak remap).
+
 [2017-08-23]
 - Add ability to type directional formatting characters with ease.
 
