@@ -1,5 +1,7 @@
 #Include, %A_ScriptDir%
 
+DllCall("LoadLibrary", "Str", "DotNetProxy.dll", "Ptr")  
+
 LastLangId := 0
 
 Global KeyboardsData
@@ -61,8 +63,11 @@ InitKeyboardsData()
 
 SetKeyboard(LangId)
 {
-	LastLangId := LangId
-	PostMessage, 0x50, 0, %LangId%,, A
+	; PostMessage, 0x50, 0, %LangId%,, A
+	If (DllCall("DotNetProxy\SetLanguage", "Int", LangId, "Int"))
+	{
+		LastLangId := LangId
+	}
 }
 
 ToggleKeyboard(Kind)
