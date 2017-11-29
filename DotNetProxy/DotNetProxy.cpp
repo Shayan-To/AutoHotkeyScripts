@@ -24,28 +24,28 @@ ref class Globals
 
 	static void app_func()
 	{
-		//control = gcnew Control;
 		form = gcnew Form;
-		//form->Click += gcnew EventHandler(click);
 		Form::typeid->GetMethod("CreateHandle", BindingFlags::NonPublic | BindingFlags::Instance)
 			->Invoke(form, gcnew array<Object ^>(0));
+		form->Activated += gcnew EventHandler(form_Activate);
 		form->BeginInvoke(gcnew Action(form, &Form::Hide));
 		Application::Run(form);
 	}
 
-	//static void click(Object ^s, EventArgs ^e)
-	//{
-	//	auto langs = InputLanguage::InstalledInputLanguages;
-	//	InputLanguage::CurrentInputLanguage = langs[rand->Next(langs->Count)];
-	//}
+	static void form_Activate(Object ^s, EventArgs ^e)
+	{
+		InputLanguage::CurrentInputLanguage = (InputLanguage ^)form->Tag;
+		form->Tag = nullptr;
+		form->Hide();
+	}
 
 public:
 	static void SetLanguage(InputLanguage ^lang)
 	{
+		form->Hide();
+		form->Tag = lang;
 		form->Show();
 		form->Activate();
-		InputLanguage::CurrentInputLanguage = lang;
-		form->Hide();
 	}
 
 	static initonly Random ^rand = gcnew Random;
@@ -62,10 +62,10 @@ extern "C" __declspec(dllexport) bool SetLanguage(int lang)
 		if ((int)langs[i]->Handle == lang)
 		{
 			Globals::form->BeginInvoke(gcnew Action<InputLanguage ^>(Globals::SetLanguage), langs[i]);
-			return 1;
+			return true;
 		}
 	}
-	return 0;
+	return false;
 }
 
 wchar_t *tmp_str = new wchar_t[100];
