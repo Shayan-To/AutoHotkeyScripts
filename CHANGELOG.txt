@@ -1,5 +1,8 @@
 In the name of God
 
+[2017-11-29]
+- Fix PotPlayer keys fix to also work with the modifiers.
+
 [2017-11-02]
 - Add PotPlayer keys fix (for Dvorak remap).
 
