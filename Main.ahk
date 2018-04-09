@@ -99,3 +99,4 @@ Capslock & \::
 ; ====================================================================
 
 #Include, GitGui.ahk
+#Include, Explorer.ahk
