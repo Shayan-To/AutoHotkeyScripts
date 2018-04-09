@@ -2,7 +2,7 @@
 
 ; ====================================================================
 
-WinOPlayerPlayPause := 1
+WinZPlayerPlayPause := 1
 GitGuiHotkeysFix := 1
 ReverseDirectionalFormattingChars := 0
 

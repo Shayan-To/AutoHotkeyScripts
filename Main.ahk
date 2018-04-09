@@ -18,7 +18,7 @@ SetCapsLockState, AlwaysOff
 
 ; ====================================================================
 
-#If, WinOPlayerPlayPause = 1
+#If, WinZPlayerPlayPause = 1
 
 #SC02C::Send, {Media_Play_Pause}
 
