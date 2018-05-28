@@ -53,10 +53,10 @@ $`::
 
 #If,
 
-Capslock & Left:: InsertDirectionalMark("Left")
-Capslock & Right:: InsertDirectionalMark("Right")
-Capslock & Down:: InsertDirectionalMark("Down")
-Capslock & Up:: InsertDirectionalMark("Up")
+CapsLock & Left:: InsertDirectionalMark("Left")
+CapsLock & Right:: InsertDirectionalMark("Right")
+CapsLock & Down:: InsertDirectionalMark("Down")
+CapsLock & Up:: InsertDirectionalMark("Up")
 
 Capslock:: ToggleKeyboard("")
 <^Capslock:: ToggleKeyboard("Left")
@@ -70,8 +70,8 @@ Capslock:: ToggleKeyboard("")
 	MsgBox, 0x%H%
 	Return
 
-Capslock & Tab::
-	If (GetKeyState("Capslock", "T") = 1)
+CapsLock & Tab::
+	If (GetKeyState("CapsLock", "T") = 1)
 	{
 		SetCapsLockState, AlwaysOff
 	}
@@ -86,12 +86,12 @@ Capslock & `::
 	MsgBox, BackTickLanguageChange = %BackTickLanguageChange%
 	Return
 
-Capslock & Insert::
+CapsLock & Insert::
 	DisableInsert := 1 - DisableInsert
 	MsgBox, DisableInsert = %DisableInsert%
 	Return
 
-Capslock & \::
+CapsLock & \::
 	FixPersianSymbolKeys := 1 - FixPersianSymbolKeys
 	MsgBox, FixPersianSymbolKeys = %FixPersianSymbolKeys%
 	Return

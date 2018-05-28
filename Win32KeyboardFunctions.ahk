@@ -20,7 +20,7 @@ InitKeyboardLayoutChange()
 	{
 		DllCall("Ole32.dll\OleInitialize", "Ptr", 0, "Int")
 		DllCall("LoadKeyboardLayout", "Str", "00020409", "Int")
-		IsInitialized = 1
+		IsInitialized := 1
 	}
 }
 

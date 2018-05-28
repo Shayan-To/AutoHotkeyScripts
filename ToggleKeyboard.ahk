@@ -77,13 +77,13 @@ ToggleKeyboard(Kind)
 		}
 	}
 
-	If (!I)
+	If (Not I)
 	{
 		MsgBox, Invalid script state.
 		Return
 	}
 
-	If (!Kind)
+	If (Not Kind)
 	{
 		I := Mod(I, KeyboardsData.Length()) + 1
 		D := KeyboardsData[I]
