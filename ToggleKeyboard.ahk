@@ -56,7 +56,7 @@ InitKeyboardsData()
 		D.CurrentKeyboard := D.Keyboards[D.CurrentKind][D.KindIndex[D.CurrentKind]]
 	}
 
-	SetKeyboard(KeyboardsData[1].CurrentKeyboard)
+	LastLangId := KeyboardsData[1].CurrentKeyboard
 }
 
 SetKeyboard(LangId)
@@ -75,6 +75,7 @@ ToggleKeyboard(Kind)
 		{
 			Break
 		}
+		I := ""
 	}
 
 	If (Not I)
@@ -87,19 +88,29 @@ ToggleKeyboard(Kind)
 	{
 		I := Mod(I, KeyboardsData.Length()) + 1
 		D := KeyboardsData[I]
+		If (Not FindKey(D.AllKeyboards, D.CurrentKeyboard))
+		{
+			MsgBox, Invalid script state.
+			Return
+		}
 		SetKeyboard(D.CurrentKeyboard)
 		Return
 	}
 
 	S := D.Keyboards[Kind]
+	J := D.KindIndex[Kind]
 
+	If (Not J Or Not S)
+	{
+		MsgBox, Invalid script state.
+		Return
+	}
 	If (S.Length() = 0)
 	{
 		MsgBox, No keyboards for '%Kind%'.
 		Return
 	}
 
-	J := D.KindIndex[Kind]
 	If (D.CurrentKind = Kind)
 	{
 		J := Mod(J, S.Length()) + 1

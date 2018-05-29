@@ -6,7 +6,7 @@ InsertDirectionalMark(Key)
 {
 	S := 1
 	C := 2
-	A := 3
+	A := 4
 	Modifiers := GetKeyState("Alt") * A + GetKeyState("Control") * C + GetKeyState("Shift") * S
 
 	If (ReverseDirectionalFormattingChars = 1)
