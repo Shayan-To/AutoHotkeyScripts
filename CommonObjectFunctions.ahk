@@ -77,3 +77,17 @@ ToStringArray(Array)
 
 	Return R . "]"
 }
+
+ReadLine(File)
+{
+    T :=  File.ReadLine()
+    If (SubStr(T, StrLen(T)) = "`n")
+    {
+        T := SubStr(T, 1, StrLen(T) - 1)
+    }
+    If (SubStr(T, StrLen(T)) = "`r")
+    {
+        T := SubStr(T, 1, StrLen(T) - 1)
+    }
+    Return T
+}

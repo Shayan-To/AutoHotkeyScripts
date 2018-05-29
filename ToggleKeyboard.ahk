@@ -121,3 +121,53 @@ ToggleKeyboard(Kind)
 	D.CurrentKeyboard := S[J]
 	SetKeyboard(S[J])
 }
+
+SaveStateToFile(Path)
+{
+	KeyboardKinds := ["Normal", "Left", "Right"]
+
+	File := FileOpen(Path, "w")
+
+	File.WriteLine(LastLangId)
+	Loop, % KeyboardsData.Length()
+	{
+		I := A_Index
+		D := KeyboardsData[I]
+
+		File.WriteLine()
+		File.WriteLine(D.CurrentKind)
+		File.WriteLine(D.CurrentKeyboard)
+
+		For _, Kind In KeyboardKinds
+		{
+			File.WriteLine(D.KindIndex[Kind])
+		}
+	}
+
+	File.Close()
+}
+
+LoadStateFromFile(Path)
+{
+	KeyboardKinds := ["Normal", "Left", "Right"]
+
+	File := FileOpen(Path, "r")
+
+	LastLangId := ReadLine(File) + 0
+	Loop, % KeyboardsData.Length()
+	{
+		I := A_Index
+		D := KeyboardsData[I]
+
+		File.ReadLine()
+		D.CurrentKind := ReadLine(File)
+		D.CurrentKeyboard := ReadLine(File) + 0
+
+		For _, Kind In KeyboardKinds
+		{
+			D.KindIndex[Kind] := ReadLine(File) + 0
+		}
+	}
+
+	File.Close()
+}
