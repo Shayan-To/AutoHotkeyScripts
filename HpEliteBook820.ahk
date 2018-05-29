@@ -8,3 +8,4 @@ ScrollLock:: Home
 Pause:: End
 
 Insert & Backspace:: Send, {AppsKey}
+Insert:: Insert

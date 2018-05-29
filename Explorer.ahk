@@ -3,7 +3,8 @@
 #If, WinActive("ahk_class ^CabinetWClass$")
 
 ; Create new text file
-^+t::
+; Ctrl+Shift+T (Qwerty k)
+^+SC025::
 	Send, !h
 	Send, w
 	Send, {Up}
