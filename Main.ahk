@@ -16,8 +16,8 @@ ToggleKeyboard2(Kind)
 	FileAppend, BToggle %LastLangId%`n, Log.log
 	ToggleKeyboard(Kind)
 	FileAppend, AToggle %LastLangId%`n, Log.log
-	SaveStateToFile("State.txt")
-	Reload
+	; SaveStateToFile("State.txt")
+	; Reload
 }
 
 InitKeyboardsData()
@@ -28,7 +28,7 @@ If (FileExist("State.txt"))
 {
 	LoadStateFromFile("State.txt")
 	FileAppend, After load %LastLangId%`n, Log.log
-	FileDelete, State.txt
+	; FileDelete, State.txt
 }
 
 SetTitleMatchMode, RegEx
@@ -40,17 +40,20 @@ SetCapsLockState, AlwaysOff
 
 ; Win+; (Qwerty Z)
 $#SC02C::Send, {Media_Play_Pause}
+; Win+A
+; $#SC01E::Send, {Media_Play_Pause}
 
 #If, FixPersianSymbolKeys = 1
 
-$+1:: Send, {!}
-$+2:: Send, {@}
-$+3:: Send, {#}
-$+4:: Send, {$}
-;$+5:: Send, {`%}
-$+6:: Send, {^}
-;$+7:: Send, {&}
-$+8:: Send, {*}
+$+SC029:: Send, {~}
+$+SC002:: Send, {!}
+$+SC003:: Send, {@}
+$+SC004:: Send, {#}
+$+SC005:: Send, {$}
+;$+SC006:: Send, {`%}
+$+SC007:: Send, {^}
+;$+SC008:: Send, {&}
+$+SC009:: Send, {*}
 
 #If, DisableInsert = 1
 
@@ -78,10 +81,16 @@ CapsLock & Right:: InsertDirectionalMark("Right")
 CapsLock & Down:: InsertDirectionalMark("Down")
 CapsLock & Up:: InsertDirectionalMark("Up")
 
-*CapsLock:: Return
+Global CapsDownTime
+
+*CapsLock::
+	CapsDownTime := A_TickCount
+	Return
+
+; *CapsLock Down:: Return
 
 *CapsLock Up::
-	If (A_PriorHotkey <> "*CapsLock" Or A_TimeSincePriorHotkey > 250)
+	If (A_PriorHotkey <> "*CapsLock" Or A_TickCount - CapsDownTime > 300) ;A_TimeSincePriorHotkey > 300)
 	{
 		Return
 	}
@@ -110,10 +119,17 @@ CapsLock & Up:: InsertDirectionalMark("Up")
 	}
 	Else If (Modifiers = A)
 	{
-		T := GetKeyboardLayout()
-		H := Format("{1:016X}", T)
-		H := SubStr(H, 9)
-		MsgBox, 0x%H%
+		; T := GetKeyboardLayout()
+		; H := Format("{1:016X}", T)
+		; H := SubStr(H, 9)
+		; MsgBox, 0x%H%
+		T := Lyt.GetList()
+		H := ""
+		Loop % T.MaxIndex()
+			H .= A_Index ": " T[A_Index].LocName " - " T[A_Index].LayoutName
+				. "`n" Format("{:#010x}", T[A_Index].hkl) "`n"
+		H .= "`n`n" ToString(KeyboardsData)
+		MsgBox, %H%
 	}
 
 	Return
@@ -147,22 +163,22 @@ CapsLock & \::
 
 ; ====================================================================
 
-CapsLock & Space:: Send {Blind}{Enter}
-CapsLock & SC028:: Send {Blind}{Enter}
+; CapsLock & Space:: Send {Blind}{Enter}
+; CapsLock & SC028:: Send {Blind}{Enter}
 
-CapsLock & SC022:: Send {Blind}{sc014}
-CapsLock & SC023:: Send {Blind}{sc015}
+; CapsLock & SC022:: Send {Blind}{sc014}
+; CapsLock & SC023:: Send {Blind}{sc015}
 
-CapsLock & SC01E:: Send {Blind}{sc02C}
-CapsLock & SC01F:: Send {Blind}{sc02D}
-CapsLock & SC020:: Send {Blind}{sc02E}
+; CapsLock & SC01E:: Send {Blind}{sc02C}
+; CapsLock & SC01F:: Send {Blind}{sc02D}
+; CapsLock & SC020:: Send {Blind}{sc02E}
 
-CapsLock & SC01B:: Send {Blind}{sc02B}
+; CapsLock & SC01B:: Send {Blind}{sc02B}
 
-CapsLock & SC025:: Send {Blind}{sc033}
-CapsLock & SC026:: Send {Blind}{sc034}
+; CapsLock & SC025:: Send {Blind}{sc033}
+; CapsLock & SC026:: Send {Blind}{sc034}
 
-^+SC035:: Send ^{sc034}
+; ^+SC035:: Send ^{sc034}
 
 ; ====================================================================
 

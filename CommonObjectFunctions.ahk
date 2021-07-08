@@ -53,7 +53,8 @@ ToStringImpl(Obj, Indent)
 	}
 	If (!R)
 	{
-		Return Obj
+		; Return Obj
+		Return Format("0x{1:016X}", Obj)
 	}
 	R .= "`n" . Indent . "}"
 	Return R

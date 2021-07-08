@@ -7,7 +7,7 @@
 ^+SC025::
 	Send, !h
 	Send, w
-	Send, {Up}
+	Send, {Up 1}
 	Send, {Enter}
 	Return
 

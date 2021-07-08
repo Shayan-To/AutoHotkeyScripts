@@ -1,4 +1,5 @@
 #Include, %A_ScriptDir%
+#Include, Lyt.ahk
 
 LastLangId := 0
 
@@ -62,7 +63,8 @@ InitKeyboardsData()
 SetKeyboard(LangId)
 {
 	LastLangId := LangId
-	PostMessage, 0x50, 0, %LangId%,, A
+	; PostMessage, 0x50, 0, %LangId%,, A
+	ToolTip % Lyt.Set(LangId)
 }
 
 ToggleKeyboard(Kind)

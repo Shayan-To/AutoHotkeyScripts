@@ -4,6 +4,13 @@
 
 SetTitleMatchMode, RegEx
 
+#If, WinActive("ahk_exe YACReader.exe")
+Up::Send, {WheelUp}
+Down::Send, {WheelDown}
+
+#If, WinActive("ahk_exe GoldenDict.exe")
+Escape::Send, !{F4}
+
 #If, WinActive("ahk_class ^PotPlayer$")
 
 $SC00C::-
