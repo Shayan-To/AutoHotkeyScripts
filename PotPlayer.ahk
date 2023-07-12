@@ -4,6 +4,18 @@
 
 SetTitleMatchMode, RegEx
 
+#F1::
+	IfWinActive, ahk_class PotPlayer64
+	{
+		WinActivate, ahk_id %ActiveWindowId%
+	}
+	Else
+	{
+		WinGet, ActiveWindowId, ID, A
+		WinActivate, ahk_class PotPlayer64
+	}
+	Return
+
 #If, WinActive("ahk_exe YACReader.exe")
 Up::Send, {WheelUp}
 Down::Send, {WheelDown}
@@ -11,7 +23,7 @@ Down::Send, {WheelDown}
 #If, WinActive("ahk_exe GoldenDict.exe")
 Escape::Send, !{F4}
 
-#If, WinActive("ahk_class ^PotPlayer$")
+#If, WinActive("ahk_class ^PotPlayer(64)?$")
 
 $SC00C::-
 $SC00D::=
