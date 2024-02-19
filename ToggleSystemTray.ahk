@@ -1,9 +1,10 @@
-SystemTrayHidden := 0
+SystemTrayShown := 1
 
-Global SystemTrayHidden
+Global SystemTrayShown
 
 SetSystemTray(Shown)
 {
+	SystemTrayShown := Shown
 	If (Shown)
 	{
 		Control, Show,, SysPager1, ahk_class Shell_TrayWnd ahk_exe Explorer.EXE
@@ -22,13 +23,7 @@ SetSystemTray(Shown)
 	}
 }
 
-ToggleSystemTray()
-{
-	SystemTrayHidden := !SystemTrayHidden
-	SetSystemTray(!SystemTrayHidden)
-}
-
-#Esc::ToggleSystemTray()
+#Esc::SetSystemTray(!SystemTrayShown)
 
 ~#^Right::SetSystemTray(0)
 ~#^Left::SetSystemTray(1)
