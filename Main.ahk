@@ -81,6 +81,10 @@ CapsLock & Right:: InsertDirectionalMark("Right")
 CapsLock & Down:: InsertDirectionalMark("Down")
 CapsLock & Up:: InsertDirectionalMark("Up")
 
+; Emoji Variation Selectors
+CapsLock & Home:: Send, {U+FE0E} ; VS15  text style (monochrome)
+CapsLock & End:: Send, {U+FE0F} ; VS16  emoji-style (with color)
+
 Global CapsDownTime
 
 *CapsLock::
