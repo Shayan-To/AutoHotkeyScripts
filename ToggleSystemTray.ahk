@@ -1,3 +1,7 @@
+#Include, %A_ScriptDir%
+#InstallKeybdHook
+#SingleInstance, Force
+
 SystemTrayShown := 1
 
 Global SystemTrayShown
